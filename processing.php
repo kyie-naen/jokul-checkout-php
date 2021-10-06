@@ -8,13 +8,18 @@ $data = json_decode(file_get_contents('php://input'));
 $invoice = 'INV_'.time();
 
 //set env
-$getUrl = 'https://api-sandbox.doku.com';
+if ($data->client == 'Sandbox') {
+  $getUrl = 'https://api-sandbox.doku.com'; //sandbox
+}
+else{
+  $getUrl = 'https://api.doku.com'; //production
+}
 $path = '/checkout/v1/payment';
 $url = $getUrl . $path;
 
 //set credentials
-$clientid = 'MCH-0447-1270651441479';
-$secretkey = 'SK-oqadmqpeZpMDa21lvEgo';
+$clientid = $data->client;
+$secretkey = $data->clientSecret;
 
 $requestid = rand(1, 100000); // You can use UUID or anything
 $dateTime = gmdate("Y-m-d H:i:s");
